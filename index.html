@@ -192,7 +192,7 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
 /* (Logic remains consistent) */
 document.getElementById('docDate').valueAsDate = new Date();
 function addRow(){ const tr=document.createElement('tr'); tr.innerHTML=`<td><textarea oninput="autoExpand(this)"></textarea></td><td><textarea oninput="autoExpand(this)"></textarea></td><td><input type="number" class="mat" onchange="calcTotal()"></td><td><input type="number" class="lab" onchange="calcTotal()"></td>`; document.getElementById('rows').appendChild(tr); }
-for(let i=0;i<4;i++) addRow();
+for(let i=0;i<1;i++) addRow();
 function autoExpand(el){ el.style.height="auto"; el.style.height=el.scrollHeight+"px"; }
 function calcTotal(){
     let m=0,l=0;
