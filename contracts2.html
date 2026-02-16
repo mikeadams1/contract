@@ -11,7 +11,6 @@
     --border-heavy: 2px solid var(--allpro-blue); 
 }
 
-/* BODY SETUP */
 body { 
     font-family: "Segoe UI", Arial, sans-serif;
     background-color: #555; 
@@ -20,11 +19,11 @@ body {
     padding-bottom: 100px; 
 }
 
-/* DYNAMIC PAGE SETUP */
+/* DYNAMIC PAGE SETUP - Prevents blank pages */
 .contract-page { 
     background: white; 
     width: 8.5in;
-    min-height: 2in; /* Allows page to shrink if content is minimal */
+    min-height: 2in; 
     margin: 20px auto; 
     padding: 0.4in; 
     box-shadow: 0 0 15px rgba(0,0,0,0.5); 
@@ -49,7 +48,7 @@ body {
 .cert-img-osha { height: 50px; width: auto; }
 .cert-img-epa { height: 55px; width: auto; }
 
-/* INFO GRID */
+/* INFO GRID - Includes the new Date Row */
 .info-grid { display: grid; grid-template-columns: 1fr 1fr; border: var(--border-heavy); margin-bottom: 15px; }
 .info-cell { border: 1px solid var(--allpro-blue); padding: 2px 6px; }
 .label { font-size: 9px; font-weight: 600; text-transform: uppercase; display: block; color: var(--allpro-blue); }
@@ -69,12 +68,12 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
 
 /* PRINT SETTINGS */
 @media print {
-    @page { size: Letter; margin: 0.5in; }
+    @page { size: Letter; margin: 0.4in; }
     body { background: white; padding: 0; }
     .app-footer, .no-print, input[type="file"], .btn-red { display: none !important; }
     .contract-page { 
         margin: 0; width: 100%; box-shadow: none; border: none !important; 
-        page-break-after: auto; /* Stops forcing new pages when empty */
+        page-break-after: auto; 
         padding: 0;
         margin-bottom: 30px;
     }
@@ -104,7 +103,7 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
                 <img src="lead-safe-certified-firm.png" alt="EPA" class="cert-img-epa">
                 <img src="original333.png" alt="OSHA" class="cert-img-osha">
             </div>
-            <span class="label">Date</span>
+            <span class="label">Document Date</span>
             <input type="date" id="docDate" style="text-align:right;">
         </div>
     </div>
@@ -115,9 +114,11 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
 
     <div class="info-grid">
         <div class="info-cell" style="grid-column: span 2;"><span class="label">Customer Name</span><input type="text"></div>
-        <div class="info-cell" style="grid-column: span 2;"><span class="label">Address</span><input type="text"></div>
-        <div class="info-cell"><span class="label">Phone</span><input type="text"></div>
-        <div class="info-cell"><span class="label">Email</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Project Property Address</span><input type="text"></div>
+        <div class="info-cell"><span class="label">Primary Phone</span><input type="text"></div>
+        <div class="info-cell"><span class="label">Email Address</span><input type="text"></div>
+        <div class="info-cell"><span class="label">Project Start Date</span><input type="date"></div>
+        <div class="info-cell"><span class="label">Est. Completion Date</span><input type="date"></div>
     </div>
 
     <table>
@@ -137,11 +138,12 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
         <div style="border:var(--border-heavy); padding:10px;">
             <span class="label" style="font-size: 8px;">Authorized Signature & Acceptance of Terms</span>
             <canvas id="sig-canvas" style="width:100%; height:90px;"></canvas>
+            <div style="text-align:center; font-size:9px; color:var(--allpro-blue); margin-top:5px;">Contractors Signature</div>
         </div>
         <div style="border:var(--border-heavy); padding:10px; text-align:right; color:var(--allpro-blue);">
-            <div>Material: <span id="mDisp">$0.00</span></div>
-            <div>Labor: <span id="lDisp">$0.00</span></div>
-            <div style="font-size:10px;">Tax: <input type="number" id="tax" style="width:60px;" onchange="calcTotal()" value="0"></div>
+            <div>Material TOTAL: <span id="mDisp">$0.00</span></div>
+            <div>Labor TOTAL: <span id="lDisp">$0.00</span></div>
+            <div style="font-size:10px;">NY State Sales Tax: <input type="number" id="tax" style="width:60px;" onchange="calcTotal()" value="0"></div>
             <div style="font-size:18px; font-weight:bold; border-top:1px solid var(--allpro-blue); margin-top:5px;">
                 TOTAL: <span id="gDisp">$0.00</span>
             </div>
@@ -152,19 +154,19 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
 <div id="photoPagesContainer"></div>
 
 <div class="contract-page force-break">
-    <h3 style="color:#002D62; border-bottom:2px solid #002D62; padding-bottom:4px; margin-top: 0;">CONTRACT TERMS</h3>
+    <h3 style="color:#002D62; border-bottom:2px solid #002D62; padding-bottom:4px; margin-top: 0;">CONTRACT TERMS & LEGAL DISCLOSURES</h3>
     <div style="font-size:10px; line-height:1.4; text-align: justify;">
-        <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to NY GBL § 771(1)(h), the owner may cancel this contract until midnight of the third business day after signing. <strong>TITLE TO MATERIALS:</strong> All materials remain the property of the Contractor until paid in full.</p>
-        <p><strong>ANTI-DISPARAGEMENT:</strong> To protect the integrity of the Contractor, the Customer agrees to refrain from making any negative, disparaging, or defamatory statements in any public or digital forum. This is a material condition of this contract.</p>
-        <p><strong>SITE SAFETY:</strong> Pursuant to OSHA, the worksite is restricted. Children, the elderly, and those with disabilities are prohibited from the workspace during active work for safety reasons.</p>
-        <p><strong>PAYMENT:</strong> Balance is due in full on the day of completion via local check, cash, or wire. Payment signifies 100% satisfaction.</p>
+        <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to New York State General Business Law (GBL § 771(1)(h)), the owner may cancel this home improvement contract until midnight of the third business day after signing. <strong>TITLE TO MATERIALS:</strong> All materials purchased and installed remain the property of the Contractor until paid in full[cite: 45, 46, 49].</p>
+        <p><strong>ANTI-DISPARAGEMENT:</strong> To protect the integrity of the Contractor, the Customer agrees to refrain from making any negative, disparaging, or defamatory statements in any written, verbal, or digital forum. This is a material condition of this contract[cite: 50, 52].</p>
+        <p><strong>SITE SAFETY & ACCESS:</strong> Pursuant to OSHA, the worksite is a restricted area. Children, the elderly, and those with disabilities are strictly prohibited from the workspace during active work hours for safety reasons[cite: 54, 55, 56].</p>
+        <p><strong>PAYMENT TERMS:</strong> Total balance is due in full on the day of completion via local check, cash, or wire transfer. Payment signifies that work is completed to your 100% satisfaction[cite: 57, 58, 59].</p>
     </div>
 </div>
 
 <div class="app-footer no-print">
-    <button class="btn btn-blue" onclick="addRow()">+ Line</button>
-    <button class="btn btn-blue" onclick="addNewPhoto()">+ Photo</button>
-    <button class="btn btn-green" onclick="window.print()">Print / PDF</button>
+    <button class="btn btn-blue" onclick="addRow()">+ Add Row</button>
+    <button class="btn btn-blue" onclick="addNewPhoto()">+ Add Photo</button>
+    <button class="btn btn-green" onclick="window.print()">Generate PDF</button>
 </div>
 
 <script>
@@ -205,13 +207,13 @@ function addNewPhoto(){
     if(!last || last.querySelectorAll('.photo-slot').length >= 4){
         last = document.createElement('div');
         last.className = 'contract-page';
-        last.innerHTML = `<h2 style="color:var(--allpro-blue); margin-top:0;">PHOTO LOG</h2><div class="photo-grid"></div>`;
+        last.innerHTML = `<h2 style="color:var(--allpro-blue); margin-top:0;">PROJECT PHOTO LOG</h2><div class="photo-grid"></div>`;
         container.appendChild(last);
     }
     const slot = document.createElement('div');
     slot.className = 'photo-slot';
     const id = 'img-' + photoTotal;
-    slot.innerHTML = `<span class="label">Description</span><input type="text"><input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print"><img id="${id}" class="preview-img"><button class="btn-red" onclick="this.parentElement.remove()">Remove</button>`;
+    slot.innerHTML = `<span class="label">PHOTO DESCRIPTION</span><input type="text"><input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print"><img id="${id}" class="preview-img"><button class="btn-red" onclick="this.parentElement.remove()">Remove</button>`;
     last.querySelector('.photo-grid').appendChild(slot);
 }
 
