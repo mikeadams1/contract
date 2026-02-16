@@ -20,7 +20,7 @@ body {
     padding-bottom: 120px; 
 }
 
-/* PAGE SETUP - Now allowed to grow */
+/* PAGE SETUP - Flowing for the Contract */
 .contract-page { 
     background: white; 
     width: 8.5in;
@@ -30,6 +30,12 @@ body {
     box-shadow: 0 0 15px rgba(0,0,0,0.5); 
     box-sizing: border-box; 
     position: relative; 
+}
+
+/* PHOTO PAGE - Fixed height to keep photos organized */
+.photo-page {
+    height: 10.8in;
+    page-break-before: always;
 }
 
 /* HEADER */
@@ -50,17 +56,12 @@ body {
 .cert-img-epa { height: 55px; width: auto; }
 
 /* INFO GRID */
-.info-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    border: var(--border-heavy); 
-    margin-bottom: 15px; 
-}
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; border: var(--border-heavy); margin-bottom: 15px; }
 .info-cell { border: 1px solid var(--allpro-blue); padding: 2px 6px; }
 .label { font-size: 9px; font-weight: 600; text-transform: uppercase; display: block; color: var(--allpro-blue); }
 input { border: none; font-family: inherit; font-size: 13px; width: 100%; outline: none; background: transparent; }
 
-/* TABLE & TEXTAREA */
+/* TABLE */
 table { width: 100%; border-collapse: collapse; border: var(--border-heavy); margin-bottom: 10px; table-layout: fixed; }
 th { border: 1px solid var(--allpro-blue); background: #f0f4f8; padding: 6px; font-size: 11px; color: var(--allpro-blue); }
 td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; }
@@ -72,25 +73,34 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
     grid-template-columns: 1.2fr 0.8fr; 
     gap: 15px; 
     margin-top: 10px;
-    page-break-inside: avoid; /* Keeps totals and signature together */
+    page-break-inside: avoid;
 }
 
-#photoPagesContainer:empty { display: none; }
+/* PHOTO STYLES - LOCKED SIZES */
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.photo-slot { 
+    border: 1px solid var(--allpro-blue); 
+    padding: 10px; 
+    background: #fff; 
+    display: flex; 
+    flex-direction: column; 
+    height: 320px; /* Locked height */
+    box-sizing: border-box;
+}
+.preview-img { 
+    max-width: 100%; 
+    max-height: 220px; /* Prevents blowing up too large */
+    margin: auto; 
+    display: none; 
+    object-fit: contain; 
+}
 
 /* PRINT SETTINGS */
 @media print {
-    @page { size: Letter; margin: 0.3in; } /* Adding margin here stops the "Ghost" pages */
+    @page { size: Letter; margin: 0.3in; }
     body { background: white; padding: 0; }
     .app-footer, .no-print, input[type="file"], .btn-red { display: none !important; }
-    .contract-page { 
-        margin: 0; 
-        width: 100%; 
-        box-shadow: none; 
-        border: none !important; 
-        padding: 0;
-        margin-bottom: 0.5in;
-    }
-    /* Ensures the Terms always starts on a fresh page */
+    .contract-page { margin: 0; width: 100%; box-shadow: none; border: none !important; padding: 0; margin-bottom: 0.2in; }
     .terms-page { page-break-before: always; border-top: var(--border-heavy) !important; padding-top: 20px; }
 }
 
@@ -98,6 +108,7 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
 .btn { padding: 15px 30px; font-weight: bold; cursor: pointer; border: 2px solid white; text-transform: uppercase; border-radius: 4px; }
 .btn-blue { background: var(--allpro-blue); color: white; }
 .btn-green { background: #27ae60; color: white; }
+.btn-red { color: #cc0000; cursor: pointer; border: none; background: none; font-weight: bold; font-size: 10px; margin-top: 5px; }
 </style>
 </head>
 
@@ -107,23 +118,16 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
     <div class="top-header">
         <div class="brand-side">
             <h1>ALL PRO PAINTING PLUS</h1>
-            <p>Servicing The Capital Region</p>
-            <p>& The North Country</p>
-            <p>(518) 701-0308</p>
-            <p>www.allpropaintingplus.com</p>
+            <p>Servicing The Capital Region & The North Country</p>
+            <p>(518) 701-0308 | www.allpropaintingplus.com</p>
         </div>
-
         <div class="cert-side">
             <div class="badge-row">
-                <img src="lead-safe-certified-firm.png" alt="EPA Lead Safe" class="cert-img-epa">
-                <img src="original333.png" alt="OSHA Certified" class="cert-img-osha">
+                <img src="lead-safe-certified-firm.png" alt="EPA" class="cert-img-epa">
+                <img src="original333.png" alt="OSHA" class="cert-img-osha">
             </div>
-            <div style="margin-top:5px;">
-                <span class="label">Residential Contract #</span>
-                <input type="text" style="text-align:right; font-weight:bold;">
-                <span class="label">Document Date</span>
-                <input type="date" id="docDate" style="text-align:right;">
-            </div>
+            <span class="label">Document Date</span>
+            <input type="date" id="docDate" style="text-align:right;">
         </div>
     </div>
 
@@ -169,13 +173,12 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
     </div>
 </div>
 
-<div id="photoPagesContainer"></div>
+<div id="photoPagesContainer" class="no-print-if-empty"></div>
 
 <div class="contract-page terms-page">
     <h3 style="color:#002D62; border-bottom:2px solid #002D62; padding-bottom:6px; margin-top: 0;">CONTRACT TERMS</h3>
     <div style="font-size:10px; line-height:1.4; text-align: justify;">
         <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to NYS GBL § 771(1)(h), you have a right to cancel this contract within three business days. Balance is due on completion. Materials remain property of contractor until paid in full.</p>
-        <p><strong>UNFORESEEN CONDITIONS:</strong> Additional reasonable fees apply for unforeseen work discovered after project commencement. Customer agrees to non-disparagement of Contractor in any forum.</p>
         <p><strong>SITE SAFETY:</strong> Worksite is restricted. Children, elderly, and those with disabilities are prohibited from the worksite for safety reasons per OSHA regulations.</p>
         <p><strong>PAYMENT:</strong> Due in full on day of completion via local check, cash, or wire. Payment signifies 100% satisfaction.</p>
     </div>
@@ -190,10 +193,7 @@ textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; res
 <script>
 document.getElementById('docDate').valueAsDate = new Date();
 
-function autoExpand(el){ 
-    el.style.height="auto"; 
-    el.style.height=el.scrollHeight+"px"; 
-}
+function autoExpand(el){ el.style.height="auto"; el.style.height=el.scrollHeight+"px"; }
 
 function addRow(){ 
     const tr=document.createElement('tr'); 
@@ -216,17 +216,27 @@ let photoTotal=0;
 function addNewPhoto(){
     photoTotal++;
     let container = document.getElementById('photoPagesContainer');
-    let last = container.lastElementChild;
+    let pages = container.querySelectorAll('.photo-page');
+    let last = pages[pages.length-1];
+
+    // If no page or current page has 4 photos, create a new one
     if(!last || last.querySelectorAll('.photo-slot').length >= 4){
         last = document.createElement('div');
-        last.className = 'contract-page';
-        last.innerHTML = `<h2 style="border-bottom:var(--border-heavy);color:var(--allpro-blue); margin-top:0;">PROJECT PHOTO LOG</h2><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;" class="photo-grid"></div>`;
+        last.className = 'contract-page photo-page';
+        last.innerHTML = `<h2 style="border-bottom:var(--border-heavy);color:var(--allpro-blue); margin-top:0;">PROJECT PHOTO LOG</h2><div class="photo-grid"></div>`;
         container.appendChild(last);
     }
+    
     const slot = document.createElement('div');
     slot.className = 'photo-slot';
     const id = 'img-' + photoTotal;
-    slot.innerHTML = `<span class="label">Photo Description</span><input type="text"><input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print"><img id="${id}" class="preview-img"><button class="btn-red no-print" onclick="this.parentElement.remove()">Remove</button>`;
+    slot.innerHTML = `
+        <span class="label">Photo Description</span>
+        <input type="text">
+        <input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print">
+        <img id="${id}" class="preview-img">
+        <button class="btn-red no-print" onclick="this.parentElement.remove()">Remove Photo</button>
+    `;
     last.querySelector('.photo-grid').appendChild(slot);
 }
 
@@ -238,6 +248,7 @@ function pv(input,id){
     } 
 }
 
+// Canvas Setup
 const canvas=document.getElementById('sig-canvas'); const ctx=canvas.getContext('2d');
 function resizeCanvas(){ const ratio=window.devicePixelRatio||1; canvas.width=canvas.offsetWidth*ratio; canvas.height=canvas.offsetHeight*ratio; ctx.scale(ratio,ratio); ctx.lineWidth=2; }
 resizeCanvas(); window.addEventListener('resize',resizeCanvas);
