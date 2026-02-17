@@ -231,5 +231,12 @@ window.addEventListener('mouseup',()=>drawing=false);
 canvas.addEventListener('touchstart',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
 canvas.addEventListener('touchmove',e=>{ if(!drawing)return; e.preventDefault(); let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+    
 </body>
 </html>
