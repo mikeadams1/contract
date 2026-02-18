@@ -1,123 +1,318 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Pro Painting Plus - Professional Estimate</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="All Pro Painting">
+<link rel="apple-touch-icon" href="original333.png">
 <style>
-:root { --allpro-blue: #002D62; --border-heavy: 2px solid var(--allpro-blue); }
-body { font-family: "Segoe UI", Arial, sans-serif; background-color: #555; margin: 0; padding: 0; padding-bottom: 120px; }
-.contract-page { background: white; width: 8.5in; margin: 20px auto; padding: 0.4in; box-shadow: 0 0 15px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }
-.top-header { display: grid; grid-template-columns: 1fr 1.2fr; border-bottom: var(--border-heavy); padding-bottom: 12px; margin-bottom: 12px; }
+:root { 
+    --allpro-blue: #002D62; 
+    --border-heavy: 2px solid var(--allpro-blue); 
+}
+
+/* BODY */
+body { 
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #555; 
+    margin: 0; 
+    padding: 0; 
+    padding-bottom: 120px; 
+}
+
+/* PAGE SETUP */
+.contract-page { 
+    background: white; 
+    width: 8.5in;
+    margin: 20px auto; 
+    padding: 0.4in; 
+    box-shadow: 0 0 15px rgba(0,0,0,0.5); 
+    box-sizing: border-box; 
+    position: relative; 
+}
+
+/* HEADER */
+.top-header { 
+    display: grid; 
+    grid-template-columns: 1fr 1.2fr;
+    border-bottom: var(--border-heavy); 
+    padding-bottom: 12px; 
+    margin-bottom: 12px;
+}
+
 .brand-side { color: var(--allpro-blue); }
-.brand-side h2 { margin: 0 0 4px 0; font-size: 26px; letter-spacing: 1px; font-weight: 700; }
+.brand-side h1 { margin: 0 0 4px 0; font-size: 26px; letter-spacing: 1px; font-weight: 700; }
 .brand-side p { margin: 1px 0; line-height: 1.2; font-size: 13px; }
+
 .cert-side { text-align: right; }
-.badge-row { display: flex; justify-content: flex-end; align-items: center; gap: 15px; margin-bottom: 8px; }
+
+/* IMAGE BADGE STYLING */
+.badge-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 8px;
+}
+
 .cert-img-osha { height: 50px; width: auto; }
 .cert-img-epa { height: 55px; width: auto; }
 
-/* THE SPLIT ADDRESS FIX */
-.info-grid { display: grid; grid-template-columns: 1fr 1fr; border: var(--border-heavy); margin-bottom: 15px; }
+/* INFO GRID - UPDATED FOR CITY/STATE/ZIP */
+.info-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    border: var(--border-heavy); 
+    margin-bottom: 15px; 
+}
 .info-cell { border: 1px solid var(--allpro-blue); padding: 2px 6px; }
 .label { font-size: 9px; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 1px; color: var(--allpro-blue); }
 input { border: none; font-family: inherit; font-size: 13px; height: 16px; width: 100%; outline: none; background: transparent; }
 
+/* TABLE & TEXTAREA FIX */
 table { width: 100%; border-collapse: collapse; border: var(--border-heavy); margin-bottom: 10px; table-layout: fixed; }
 th { border: 1px solid var(--allpro-blue); background: #f0f4f8; padding: 6px; font-size: 11px; color: var(--allpro-blue); }
 td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; }
-textarea { width: 100%; border: none; font-family: inherit; font-size: 12px; resize: none; background: transparent; padding: 4px; box-sizing: border-box; overflow: hidden; min-height: 26px; line-height: 1.2; display: block; }
 
+textarea { 
+    width: 100%; border: none; font-family: inherit; font-size: 12px; resize: none; 
+    background: transparent; padding: 4px; box-sizing: border-box; overflow: hidden; 
+    min-height: 26px; line-height: 1.2; display: block;
+}
+
+/* Print-only expansion div */
+.print-text {
+    display: none;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 12px;
+    padding: 4px;
+    line-height: 1.2;
+}
+
+/* PHOTO GRID */
+.photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.photo-slot { border: 1px solid var(--allpro-blue); padding: 10px; background: #fff; display: flex; flex-direction: column; min-height: 260px; page-break-inside: avoid; break-inside: avoid; }
+.preview-img { max-width: 100%; max-height: 160px; margin: auto; display: none; border: 1px solid #333; object-fit: contain; }
+
+/* PRINT SETTINGS */
 @media print {
-@page { size: Letter; margin: 0; }
-body { background: white; padding: 0; }
-.app-footer, .no-print, input[type="file"], .btn-red { display: none !important; }
-.contract-page { margin: 0; width: 100%; box-shadow: none; border: none !important; }
-textarea { height: auto !important; overflow: visible !important; display: block !important; }
-tr { page-break-inside: avoid !important; }
+    @page { size: Letter; margin: 0; }
+    body { background: white; padding: 0; }
+    .app-footer, .no-print, input[type="file"], .btn-red { display: none !important; }
+    .contract-page { margin: 0; width: 100%; box-shadow: none; border: none !important; }
+    .force-break { break-before: page; page-break-before: always; }
+    
+    /* Reveal print-text and hide textareas to prevent iPad clipping */
+    textarea { display: none !important; }
+    .print-text { display: block !important; }
 }
 
 .app-footer { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
 .btn { padding: 15px 30px; font-weight: bold; cursor: pointer; border: 2px solid white; text-transform: uppercase; border-radius: 4px; }
 .btn-blue { background: var(--allpro-blue); color: white; }
 .btn-green { background: #27ae60; color: white; }
+.btn-red { background: transparent; color: #cc0000; border:none; cursor:pointer; font-size:10px; margin-top:5px; }
 </style>
-
 </head>
+
 <body>
+
 <div class="contract-page">
-<div class="top-header">
-<div class="brand-side">
-<h2>ALL PRO PAINTING PLUS</h2>
-<p>Servicing The Capital Region</p>
-<p>(518) 701-0308</p>
-</div>
-<div class="cert-side">
-<div class="badge-row">
-<img src="lead-safe-certified-firm.png" class="cert-img-epa">
-<img src="original333.png" class="cert-img-osha">
-</div>
-<span class="label">Contract #</span><input type="text">
-<span class="label">Date</span><input type="date" id="docDate">
-</div>
+    <div class="top-header">
+        <div class="brand-side">
+            <h2>ALL PRO PAINTING PLUS</h2>
+            <p>Servicing The Capital Region</p>
+            <p>& The North Country</p>
+            <p>(518) 701-0308</p>
+            <p>www.allpropaintingplus.com</p>
+        </div>
+
+        <div class="cert-side">
+            <div class="badge-row">
+                <img src="lead-safe-certified-firm.png" alt="EPA Lead Safe" class="cert-img-epa">
+                <img src="original333.png" alt="OSHA Certified" class="cert-img-osha">
+            </div>
+            <div style="margin-top:5px;">
+                <span class="label">Residential Contract #</span>
+                <input type="text" style="text-align:right; font-weight:bold;">
+                <span class="label">Document Date</span>
+                <input type="date" id="docDate" style="text-align:right;">
+            </div>
+        </div>
+    </div>
+
+    <div style="border: 3px double var(--allpro-blue); text-align: center; padding: 8px; margin-bottom: 15px; font-weight: bold; color: var(--allpro-blue);">
+        LICENSED / CERTIFIED / FULLY INSURED / 40 YEARS EXPERIENCE
+    </div>
+
+    <div class="info-grid">
+        <div class="info-cell" style="grid-column: span 4;"><span class="label">Customer / Property Owner</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 4;"><span class="label">Street Address</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">City</span><input type="text"></div>
+        <div class="info-cell"><span class="label">State</span><input type="text" value="NY"></div>
+        <div class="info-cell"><span class="label">Zip Code</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Primary Phone</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Email Address</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Project Start Date</span><input type="date"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Est. Completion Date</span><input type="date"></div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:25%;">Area</th>
+                <th style="width:45%;">Work Description</th>
+                <th style="width:15%;">Materials</th>
+                <th style="width:15%;">Labor</th>
+            </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+    </table>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:15px;">
+        <div style="border:var(--border-heavy); padding:10px;">
+            <span class="label">Customers Signature and Acceptance of this Contract and Terms Stipulates that You have the authority to enter into this Contract and agree to make Payment In Full On The Day Of Completion by Local Check, Cash, or by Fed Wire at the contractors direction.</span>
+            <canvas id="sig-canvas" style="width:100%; height:90px;"></canvas>
+        </div>
+        <div style="border:var(--border-heavy); padding:10px; text-align:right; color:var(--allpro-blue);">
+            <div>Material TOTAL: <span id="mDisp">$0.00</span></div>
+            <div>Labor TOTAL: <span id="lDisp">$0.00</span></div>
+            <div style="font-size:10px;">NY State Sales Tax: <input type="number" id="tax" style="width:60px;" onchange="calcTotal()"></div>
+            <div style="font-size:20px; font-weight:bold; border-top:2px solid var(--allpro-blue); margin-top:5px; padding-top:5px;">
+                TOTAL: <span id="gDisp">$0.00</span>
+                <p style="font-size:12px; margin-top:10px;">Contractors Signature</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="info-grid">
-<div class="info-cell" style="grid-column: span 2;"><span class="label">Customer</span><input type="text"></div>
-<div class="info-cell" style="grid-column: span 2;"><span class="label">Street Address</span><input type="text"></div>
-<div class="info-cell"><span class="label">City / Town</span><input type="text"></div>
-<div class="info-cell"><span class="label">State / Zip</span><input type="text"></div>
-<div class="info-cell"><span class="label">Phone</span><input type="text"></div>
-<div class="info-cell"><span class="label">Email</span><input type="text"></div>
-</div>
+<div id="photoPagesContainer"></div>
 
-<table>
-<thead><tr><th>Area</th><th>Description</th><th>Material</th><th>Labor</th></tr></thead>
-<tbody id="rows"></tbody>
-</table>
+<div class="contract-page force-break">
+    <h3 style="color:#002D62; border-bottom:2px solid #002D62; padding-bottom:6px; margin-top: 0;">CONTRACT TERMS</h3>
+    <div style="font-size:10px; line-height:1.4; text-align: justify;">
+        <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to New York State General Business Law the following disclosures listed herein are understood and accepted by the party signing this contract for services and as the consumer, by my signature executed on this contract, I agree that I have read the same and fully understand and agree to be bound by all the terms stated herein. Pursuant to GBL 771(1)(h) you have a right to cancel this contract within three business days. See, GBL § 771(1)(h). In addition to any right otherwise to revoke an offer, the owner may cancel the home improvement contract until midnight of the third business day after the day on which the owner has signed an agreement or offer to purchase relating to such contract.</p>
 
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-<div style="border:var(--border-heavy); padding:10px;">
-<span class="label">Acceptance Signature</span>
-<canvas id="sig-canvas" style="width:100%; height:90px; border-bottom: 1px solid #ccc;"></canvas>
-</div>
-<div style="border:var(--border-heavy); padding:10px; text-align:right;">
-<div>TOTAL: <span id="gDisp">$0.00</span></div>
-</div>
-</div>
+        <p><strong>WORK AUTHORIZATION & BINDING AGREEMENT:</strong> By executing this contract, the Customer certifies that they have read this document and all accompanying pages in its entirety and expressly agrees to all terms, conditions, and facts stated herein. The Customer authorizes All Pro Painting Plus to perform the services described. <strong>TITLE TO MATERIALS:</strong> It is strictly understood that all materials purchased and installed by All Pro Painting Plus remain the sole property of the Contractor until the contract balance is paid in full.</p>
+        
+        <p><strong>UNFORESEEN CONDITIONS:</strong> In the event that any additional unforeseen work is discovered and required to complete the terms of this contract, consumer agrees to pay any additional reasonable fees to accomplish the same. Customer further agrees to protect the integrity and reputation of the Contractor by refraining from making any disparaging, negative, or defamatory statements regarding the Contractor on any Internet-based social media or review platform.</p>
+
+        <p><strong>SITE SAFETY & ACCESS:</strong> You agree to allow us to do our work unsupervised and unfettered. You agree to allow contractor access to the job site and that once the work has commenced that you the customer are prohibited from access to the worksite for safety reasons to maintain a safe working environment in conformity with OSHA Regulations.</p>
+
+        <p><strong>PAYMENT TERMS:</strong> The amount stipulated on the front of this contract is due on the day of project completion. Your payment signifies that you the consumer are 100% satisfied and that the job is completed to your satisfaction. Payment must be made by a local check, cash, wire transfer, or certified check from a local bank.</p>
+    </div>
 </div>
 
 <div class="app-footer">
-<button class="btn btn-blue" onclick="addRow()">+ Add Line</button>
-<button class="btn btn-green" onclick="window.print()">Generate PDF</button>
+    <button class="btn btn-blue" onclick="addRow()">+ Add Line</button>
+    <button class="btn btn-blue" onclick="addNewPhoto()">+ Add Photo</button>
+    <button class="btn btn-green" onclick="window.print()">Generate PDF</button>
 </div>
 
 <script>
 document.getElementById('docDate').valueAsDate = new Date();
-function addRow(){
-const tr=document.createElement('tr');
-tr.innerHTML=&lt;td&gt;&lt;textarea oninput=&quot;autoExpand(this)&quot;&gt;&lt;/textarea&gt;&lt;/td&gt;&lt;td&gt;&lt;textarea oninput=&quot;autoExpand(this)&quot;&gt;&lt;/textarea&gt;&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;mat&quot; onchange=&quot;calcTotal()&quot;&gt;&lt;/td&gt;&lt;td&gt;&lt;input type=&quot;number&quot; class=&quot;lab&quot; onchange=&quot;calcTotal()&quot;&gt;&lt;/td&gt;;
 
-document.getElementById('rows').appendChild(tr);
+function addRow(){ 
+    const tr=document.createElement('tr'); 
+    tr.innerHTML=`
+        <td><textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div></td>
+        <td><textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div></td>
+        <td><input type="number" class="mat" onchange="calcTotal()"></td>
+        <td><input type="number" class="lab" onchange="calcTotal()"></td>`; 
+    document.getElementById('rows').appendChild(tr); 
 }
-addRow();
-function autoExpand(el){ el.style.height="auto"; el.style.height=el.scrollHeight+"px"; }
+
+for(let i=0;i<1;i++) addRow();
+
+function autoExpand(el){ 
+    el.style.height="auto"; 
+    el.style.height=el.scrollHeight+"px"; 
+    // Sync to print div
+    const printDiv = el.parentElement.querySelector('.print-text');
+    if(printDiv) printDiv.innerText = el.value;
+}
+
 function calcTotal(){
-let m=0,l=0;
-document.querySelectorAll('.mat').forEach(i=>m+=Number(i.value)||0);
-document.querySelectorAll('.lab').forEach(i=>l+=Number(i.value)||0);
-document.getElementById('gDisp').innerText='$'+(m+l).toFixed(2);
+    let m=0,l=0;
+    document.querySelectorAll('.mat').forEach(i=>m+=Number(i.value)||0);
+    document.querySelectorAll('.lab').forEach(i=>l+=Number(i.value)||0);
+    let t=Number(document.getElementById('tax').value)||0;
+    mDisp.innerText='$'+m.toFixed(2); lDisp.innerText='$'+l.toFixed(2); gDisp.innerText='$'+(m+l+t).toFixed(2);
 }
-const canvas=document.getElementById('sig-canvas'); const ctx=canvas.getContext('2d');
-function resizeCanvas(){ const ratio=window.devicePixelRatio||1; canvas.width=canvas.offsetWidthratio; canvas.height=canvas.offsetHeightratio; ctx.scale(ratio,ratio); ctx.lineWidth=2; }
-resizeCanvas();
+
+let photoTotal=0;
+function addNewPhoto(){
+    photoTotal++;
+    let container = document.getElementById('photoPagesContainer');
+    let pages = container.querySelectorAll('.photo-page');
+    let last = pages[pages.length-1];
+    if(!last || last.querySelector('.photo-grid').querySelectorAll('.photo-slot').length >= 6){
+        last = document.createElement('div');
+        last.className = 'contract-page photo-page';
+        last.innerHTML = `<h2 style="border-bottom:var(--border-heavy);color:var(--allpro-blue); margin-top:0;">PROJECT PHOTO LOG</h2><div class="photo-grid"></div>`;
+        container.appendChild(last);
+    }
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    const id = 'img-' + photoTotal;
+    slot.innerHTML = `
+        <span class="label">Photo Description</span>
+        <textarea oninput="autoExpand(this)" style="font-size:11px;"></textarea>
+        <div class="print-text" style="font-size:11px;"></div>
+        <input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print">
+        <img id="${id}" class="preview-img">
+        <button class="btn-red" onclick="this.parentElement.remove()">Remove</button>`;
+    last.querySelector('.photo-grid').appendChild(slot);
+}
+
+function pv(input,id){ 
+    if(input.files&&input.files[0]){ 
+        let r=new FileReader(); 
+        r.onload=e=>{ 
+            let img=document.getElementById(id); 
+            img.src=e.target.result; 
+            img.style.display='block'; 
+        }; 
+        r.readAsDataURL(input.files[0]); 
+    } 
+}
+
+const canvas=document.getElementById('sig-canvas'); 
+const ctx=canvas.getContext('2d');
+
+function resizeCanvas(){ 
+    const ratio=window.devicePixelRatio||1; 
+    canvas.width=canvas.offsetWidth*ratio; 
+    canvas.height=canvas.offsetHeight*ratio; 
+    ctx.scale(ratio,ratio); 
+    ctx.lineWidth=2; 
+    ctx.strokeStyle="#002D62";
+}
+resizeCanvas(); 
+window.addEventListener('resize',resizeCanvas);
+
 let drawing=false;
-function pos(e){ const r=canvas.getBoundingClientRect(); return{ x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top }; }
+function pos(e){ 
+    const r=canvas.getBoundingClientRect(); 
+    return{ 
+        x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, 
+        y:(e.touches?e.touches[0].clientY:e.clientY)-r.top 
+    }; 
+}
 canvas.addEventListener('mousedown',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); });
 canvas.addEventListener('mousemove',e=>{ if(!drawing)return; let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
 window.addEventListener('mouseup',()=>drawing=false);
+canvas.addEventListener('touchstart',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
+canvas.addEventListener('touchmove',e=>{ if(!drawing)return; e.preventDefault(); let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
 </script>
-
 </body>
 </html>
