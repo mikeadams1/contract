@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>All Pro Painting Plus - Professional Estimate</title>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -54,29 +54,52 @@ body {
 
 .header-right { color: var(--allpro-blue); font-weight: bold; font-size: 11px; line-height: 1.1; text-align: right; }
 
-/* INFO GRID - FIXED RIGHT BORDER */
+/* INFO GRID - IPAD BLEED FIX */
 .info-grid { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
     border-top: var(--border-heavy);
     border-left: var(--border-heavy);
     margin-bottom: 10px; 
+    background-color: white;
 }
 .info-cell { 
     border-right: var(--border-heavy); 
     border-bottom: var(--border-heavy); 
     padding: 2px 5px; 
+    background-color: white !important;
+    position: relative;
+    overflow: hidden; 
 }
-.label { font-size: 8px; font-weight: 800; text-transform: uppercase; display: block; color: var(--allpro-blue); }
-input { border: none; font-family: inherit; font-size: 12px; height: 18px; width: 100%; outline: none; background: transparent; }
+.label { font-size: 8px; font-weight: 800; text-transform: uppercase; display: block; color: var(--allpro-blue); position: relative; z-index: 2; }
 
-/* CALENDAR INPUT STYLING */
-input[type="date"] { font-size: 11px; color: #333; }
+/* INPUT IPAD OVERRIDE */
+input { 
+    border: none; 
+    font-family: inherit; 
+    font-size: 12px; 
+    height: 18px; 
+    width: 100%; 
+    outline: none; 
+    background: transparent !important; 
+    -webkit-appearance: none; 
+    border-radius: 0;
+    position: relative;
+    z-index: 1;
+}
 
-/* TABLE FIXES */
+input:focus, 
+input:-webkit-autofill,
+textarea:focus {
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px 1000px white inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* TABLE */
 table { width: 100%; border-collapse: collapse; border: var(--border-heavy); margin-bottom: 10px; table-layout: fixed; }
 th { border: 1px solid var(--allpro-blue); background: #f0f4f8; padding: 4px; font-size: 10px; color: var(--allpro-blue); }
-td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; }
+td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; background: white; position: relative; overflow: hidden; }
 
 tr { page-break-inside: avoid !important; break-inside: avoid !important; }
 
@@ -84,23 +107,62 @@ textarea {
     width: 100%; border: none; font-family: inherit; font-size: 12px; resize: none; 
     background: transparent; padding: 4px; box-sizing: border-box; overflow: hidden; 
     min-height: 24px; line-height: 1.3; display: block;
+    -webkit-appearance: none;
+    outline: none;
 }
 
 .print-text { display: none; white-space: pre-wrap; word-wrap: break-word; font-size: 12px; padding: 4px; line-height: 1.3; }
 
-/* SIGNATURE BOX */
-#sig-canvas { background: #f9f9f9; cursor: crosshair; width: 100%; height: 70px; border-bottom: 1px solid #000; margin-top: 5px; }
+/* SIGNATURE BLOCK */
+.sig-container {
+    border: var(--border-heavy); 
+    padding: 8px; 
+    background: white;
+}
+#sig-canvas { 
+    background: #f0f0f0; 
+    cursor: not-allowed; 
+    width: 100%; 
+    height: 80px; 
+    border-bottom: 1px solid #000; 
+    margin-top: 5px;
+    opacity: 0.5; /* Visual cue that it's locked */
+}
+#sig-canvas.enabled {
+    background: #fff;
+    cursor: crosshair;
+    opacity: 1;
+}
 .sig-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
+
+/* CHECKBOX STYLING */
+.terms-check-wrapper {
+    background: #fff8e1;
+    border: 1px solid #ffca28;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+}
+.terms-check-wrapper input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
 
 /* PRINT SETTINGS */
 @media print {
     @page { size: Letter; margin: 0.5in; }
     body { background: white; padding: 0; }
-    .app-footer, .no-print, input[type="file"], .btn-red, .sig-btn { display: none !important; }
+    .app-footer, .no-print, input[type="file"], .btn-red, .sig-btn, .terms-check-wrapper { display: none !important; }
     .contract-page { margin: 0; width: 100%; box-shadow: none; border: none !important; padding: 0.1in; }
     .force-break { break-before: page; page-break-before: always; }
     textarea { display: none !important; }
     .print-text { display: block !important; }
+    #sig-canvas { background: white !important; opacity: 1 !important; }
 }
 
 .app-footer { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
@@ -108,6 +170,7 @@ textarea {
 .btn-blue { background: var(--allpro-blue); color: white; }
 .btn-green { background: #27ae60; color: white; }
 .sig-btn { background: #eee; border: 1px solid #ccc; font-size: 9px; padding: 2px 5px; cursor: pointer; color: #666; border-radius: 3px; }
+.btn-red { background: transparent; color: #cc0000; border:none; cursor:pointer; font-size:10px; margin-top:5px; }
 </style>
 </head>
 
@@ -140,13 +203,13 @@ textarea {
     </div>
 
     <div class="info-grid">
-        <div class="info-cell" style="grid-column: span 3;"><span class="label">Customer Name</span><input type="text"></div>
-        <div class="info-cell"><span class="label">Phone</span><input type="text"></div>
-        <div class="info-cell" style="grid-column: span 4;"><span class="label">Project Street Address</span><input type="text"></div>
-        <div class="info-cell" style="grid-column: span 2;"><span class="label">City</span><input type="text"></div>
-        <div class="info-cell"><span class="label">State</span><input type="text" value="NY"></div>
-        <div class="info-cell"><span class="label">Zip</span><input type="text"></div>
-        <div class="info-cell" style="grid-column: span 2;"><span class="label">Email</span><input type="text"></div>
+        <div class="info-cell" style="grid-column: span 3;"><span class="label">Customer Name</span><input type="text" spellcheck="false" autocomplete="off"></div>
+        <div class="info-cell"><span class="label">Phone</span><input type="text" spellcheck="false" autocomplete="off"></div>
+        <div class="info-cell" style="grid-column: span 4;"><span class="label">Project Street Address</span><input type="text" spellcheck="false" autocomplete="off"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">City</span><input type="text" spellcheck="false" autocomplete="off"></div>
+        <div class="info-cell"><span class="label">State</span><input type="text" value="NY" spellcheck="false" autocomplete="off"></div>
+        <div class="info-cell"><span class="label">Zip</span><input type="text" spellcheck="false" autocomplete="off"></div>
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Email</span><input type="text" spellcheck="false" autocomplete="off"></div>
         <div class="info-cell"><span class="label">Start Date</span><input type="date"></div>
         <div class="info-cell"><span class="label">Est. Finish</span><input type="date"></div>
     </div>
@@ -164,16 +227,24 @@ textarea {
     </table>
 
     <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:15px; margin-top:10px;">
-        <div style="border:var(--border-heavy); padding:8px;">
-            <span class="label" style="font-size:7px; line-height: 1.1;">Customer Signature and Acceptance: Stipulates authority to enter into Contract and agreement to Payment In Full On Day Of Completion.</span>
-            <canvas id="sig-canvas"></canvas>
-            <div class="sig-controls">
-                <span style="font-size: 10px; color: var(--allpro-blue); font-weight: bold;">Signature</span>
-                <button class="sig-btn no-print" onclick="clearSig()">Clear Signature</button>
-                <span style="font-size: 10px; color: var(--allpro-blue); font-weight: bold;">Date</span>
+        <div>
+            <div class="terms-check-wrapper no-print">
+                <input type="checkbox" id="termsAgree" onchange="toggleSignature(this)">
+                <label for="termsAgree"><strong>I have read and agree to the Terms & Disclosures on Page 2</strong></label>
+            </div>
+
+            <div class="sig-container">
+                <span class="label" style="font-size:7px; line-height: 1.1;">Customer Signature and Acceptance: Stipulates authority to enter into Contract and agreement to Payment In Full On Day Of Completion.</span>
+                <canvas id="sig-canvas"></canvas>
+                <div class="sig-controls">
+                    <span style="font-size: 10px; color: var(--allpro-blue); font-weight: bold;">Signature</span>
+                    <button class="sig-btn no-print" onclick="clearSig()">Clear Signature</button>
+                    <span style="font-size: 10px; color: var(--allpro-blue); font-weight: bold;">Date</span>
+                </div>
             </div>
         </div>
-        <div style="border:var(--border-heavy); padding:10px; text-align:right; color:var(--allpro-blue);">
+
+        <div style="border:var(--border-heavy); padding:10px; text-align:right; color:var(--allpro-blue); background:white;">
             <div style="font-weight: bold; font-size: 12px;">SUB TOTAL: <span id="lDisp">$0.00</span></div>
             <div style="font-size:10px; margin-top: 3px;">NY Sales Tax: <input type="number" id="tax" style="width:60px; border-bottom: 1px solid var(--allpro-blue); text-align: right;" onchange="calcTotal()"></div>
             <div style="font-size:16px; font-weight:bold; border-top:2px solid var(--allpro-blue); margin-top:5px; padding-top:5px;">
@@ -187,11 +258,11 @@ textarea {
 <div class="contract-page force-break">
     <h3 style="color:#002D62; border-bottom:2px solid #002D62; padding-bottom:4px; margin-top: 0; font-size: 14px;">TERMS & DISCLOSURES</h3>
     <div style="font-size:10px; line-height:1.3; text-align: justify; color: #333;">
-        <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to NYS GBL, you have a right to cancel this contract within three business days. Notice of cancellation must be in writing. In addition to any right otherwise to revoke an offer, the owner may cancel the home improvement contract until midnight of the third business day after the day on which the owner has signed an agreement or offer to purchase relating to such contract. [cite: 234, 235]</p>
-        <p><strong>MECHANIC'S LIEN:</strong> Any contractor, subcontractor, or materialman who provides home improvement goods or services pursuant to your home improvement contract and who is not paid may have a valid legal claim against your property known as a mechanic's lien. [cite: 236]</p>
-        <p><strong>UNFORESEEN CONDITIONS:</strong> Consumer agrees to pay additional reasonable fees for unforeseen work discovered after project commencement. [cite: 237]</p>
-        <p><strong>NON-DISPARAGEMENT:</strong> You agree that you will not (nor will you cause or cooperate with others to) publicly criticize, ridicule, disparage or defame APP+, the company or its products, services, policies, directors, officers, employees, with or through any written or oral statement or image. [cite: 238]</p>
-        <p><strong>PAYMENT:</strong> Payment is due in full on the day of completion via local check, cash, or certified bank check. No credit cards. Your payment signifies that you the consumer are 100% satisfied and that the job is completed to your satisfaction. [cite: 239, 240]</p>
+        <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to NYS GBL, you have a right to cancel this contract within three business days. Notice of cancellation must be in writing. In addition to any right otherwise to revoke an offer, the owner may cancel the home improvement contract until midnight of the third business day after the day on which the owner has signed an agreement or offer to purchase relating to such contract.</p>
+        <p><strong>MECHANIC'S LIEN:</strong> Any contractor, subcontractor, or materialman who provides home improvement goods or services pursuant to your home improvement contract and who is not paid may have a valid legal claim against your property known as a mechanic's lien.</p>
+        <p><strong>UNFORESEEN CONDITIONS:</strong> Consumer agrees to pay additional reasonable fees for unforeseen work discovered after project commencement.</p>
+        <p><strong>NON-DISPARAGEMENT:</strong> You agree that you will not (nor will you cause or cooperate with others to) publicly criticize, ridicule, disparage or defame APP+, the company or its products, services, policies, directors, officers, employees, with or through any written or oral statement or image.</p>
+        <p><strong>PAYMENT:</strong> Payment is due in full on the day of completion via local check, cash, or certified bank check. No credit cards. Your payment signifies that you the consumer are 100% satisfied and that the job is completed to your satisfaction and that no other work needs to be done in regards to the same. By signing this contract, you agree that you have read and understand those things stated herein in its entirety and are bound to the same.</p>
     </div>
 </div>
 
@@ -204,15 +275,14 @@ textarea {
 </div>
 
 <script>
-// Auto-fill today's date in calendar format
 document.getElementById('docDate').valueAsDate = new Date();
 
 function addRow(){ 
     const tr=document.createElement('tr'); 
     tr.innerHTML=`
-        <td><textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div></td>
-        <td><textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div></td>
-        <td><input type="text" onchange="calcTotal()"></td>
+        <td><textarea oninput="autoExpand(this)" spellcheck="false" autocomplete="off"></textarea><div class="print-text"></div></td>
+        <td><textarea oninput="autoExpand(this)" spellcheck="false" autocomplete="off"></textarea><div class="print-text"></div></td>
+        <td><input type="text" onchange="calcTotal()" spellcheck="false" autocomplete="off"></td>
         <td><input type="number" class="lab" onchange="calcTotal()"></td>`; 
     document.getElementById('rows').appendChild(tr); 
 }
@@ -232,7 +302,21 @@ function calcTotal(){
     lDisp.innerText='$'+l.toFixed(2); gDisp.innerText='$'+(l+t).toFixed(2);
 }
 
-// Photo Logic and Signature Logic remains same as previous functional version...
+// TOGGLE SIGNATURE ENABLE/DISABLE
+let sigEnabled = false;
+function toggleSignature(cb) {
+    const canvas = document.getElementById('sig-canvas');
+    if (cb.checked) {
+        canvas.classList.add('enabled');
+        sigEnabled = true;
+    } else {
+        canvas.classList.remove('enabled');
+        sigEnabled = false;
+        clearSig();
+    }
+}
+
+// Photo Logic
 let photoTotal=0;
 function addNewPhoto(){
     photoTotal++;
@@ -250,7 +334,7 @@ function addNewPhoto(){
     const id = 'img-' + photoTotal;
     slot.innerHTML = `
         <span class="label">Description</span>
-        <textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div>
+        <textarea oninput="autoExpand(this)" spellcheck="false" autocomplete="off"></textarea><div class="print-text"></div>
         <input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print">
         <img id="${id}" class="preview-img">
         <button class="btn-red" onclick="this.parentElement.remove()">Remove</button>`;
@@ -265,6 +349,7 @@ function pv(input,id){
     } 
 }
 
+// Signature Canvas
 const canvas=document.getElementById('sig-canvas'); 
 const ctx=canvas.getContext('2d');
 function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
@@ -275,16 +360,23 @@ function resizeCanvas(){
 }
 resizeCanvas(); 
 window.addEventListener('resize',resizeCanvas);
+
 let drawing=false;
 function pos(e){ 
     const r=canvas.getBoundingClientRect(); 
     return{ x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top }; 
 }
-canvas.addEventListener('mousedown',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); });
-canvas.addEventListener('mousemove',e=>{ if(!drawing)return; let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+canvas.addEventListener('mousedown',e=>{ 
+    if(!sigEnabled) return;
+    drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); 
+});
+canvas.addEventListener('mousemove',e=>{ if(!drawing || !sigEnabled)return; let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
 window.addEventListener('mouseup',()=>drawing=false);
-canvas.addEventListener('touchstart',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
-canvas.addEventListener('touchmove',e=>{ if(!drawing)return; e.preventDefault(); let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
+canvas.addEventListener('touchstart',e=>{ 
+    if(!sigEnabled) return;
+    drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); 
+},{passive:false});
+canvas.addEventListener('touchmove',e=>{ if(!drawing || !sigEnabled)return; e.preventDefault(); let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
 </script>
 </body>
 </html>
