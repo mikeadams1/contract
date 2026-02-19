@@ -88,70 +88,40 @@ input {
     z-index: 1;
 }
 
-input:focus, 
-input:-webkit-autofill,
-textarea:focus {
+input:focus, input:-webkit-autofill, textarea:focus {
     -webkit-box-shadow: 0 0 0px 1000px white inset !important;
     box-shadow: 0 0 0px 1000px white inset !important;
-    transition: background-color 5000s ease-in-out 0s;
 }
 
 /* TABLE */
 table { width: 100%; border-collapse: collapse; border: var(--border-heavy); margin-bottom: 10px; table-layout: fixed; }
 th { border: 1px solid var(--allpro-blue); background: #f0f4f8; padding: 4px; font-size: 10px; color: var(--allpro-blue); }
-td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; background: white; position: relative; overflow: hidden; }
+td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; background: white; }
 
 tr { page-break-inside: avoid !important; break-inside: avoid !important; }
 
 textarea { 
     width: 100%; border: none; font-family: inherit; font-size: 12px; resize: none; 
     background: transparent; padding: 4px; box-sizing: border-box; overflow: hidden; 
-    min-height: 24px; line-height: 1.3; display: block;
-    -webkit-appearance: none;
-    outline: none;
+    min-height: 24px; line-height: 1.3; display: block; -webkit-appearance: none; outline: none;
 }
 
 .print-text { display: none; white-space: pre-wrap; word-wrap: break-word; font-size: 12px; padding: 4px; line-height: 1.3; }
 
+/* PHOTO GRID - WORKING VERSION */
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+.photo-slot { border: 1px solid var(--allpro-blue); padding: 10px; text-align: center; }
+.preview-img { max-width: 100%; max-height: 250px; display: none; margin-top: 10px; border: 1px solid #ccc; }
+
 /* SIGNATURE BLOCK */
-.sig-container {
-    border: var(--border-heavy); 
-    padding: 8px; 
-    background: white;
-}
-#sig-canvas { 
-    background: #f0f0f0; 
-    cursor: not-allowed; 
-    width: 100%; 
-    height: 80px; 
-    border-bottom: 1px solid #000; 
-    margin-top: 5px;
-    opacity: 0.5; /* Visual cue that it's locked */
-}
-#sig-canvas.enabled {
-    background: #fff;
-    cursor: crosshair;
-    opacity: 1;
-}
+.sig-container { border: var(--border-heavy); padding: 8px; background: white; }
+#sig-canvas { background: #f0f0f0; cursor: not-allowed; width: 100%; height: 80px; border-bottom: 1px solid #000; margin-top: 5px; opacity: 0.5; }
+#sig-canvas.enabled { background: #fff; cursor: crosshair; opacity: 1; }
 .sig-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
 
-/* CHECKBOX STYLING */
-.terms-check-wrapper {
-    background: #fff8e1;
-    border: 1px solid #ffca28;
-    padding: 8px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #333;
-}
-.terms-check-wrapper input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
+/* TERMS CHECKBOX */
+.terms-check-wrapper { background: #fff8e1; border: 1px solid #ffca28; padding: 8px; margin-bottom: 10px; font-size: 11px; display: flex; align-items: center; gap: 10px; color: #333; }
+.terms-check-wrapper input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; }
 
 /* PRINT SETTINGS */
 @media print {
@@ -232,7 +202,6 @@ textarea {
                 <input type="checkbox" id="termsAgree" onchange="toggleSignature(this)">
                 <label for="termsAgree"><strong>I have read and agree to the Terms & Disclosures on Page 2</strong></label>
             </div>
-
             <div class="sig-container">
                 <span class="label" style="font-size:7px; line-height: 1.1;">Customer Signature and Acceptance: Stipulates authority to enter into Contract and agreement to Payment In Full On Day Of Completion.</span>
                 <canvas id="sig-canvas"></canvas>
@@ -296,27 +265,18 @@ function autoExpand(el){
 }
 
 function calcTotal(){
-    let l=0;
-    document.querySelectorAll('.lab').forEach(i=>l+=Number(i.value)||0);
+    let l=0; document.querySelectorAll('.lab').forEach(i=>l+=Number(i.value)||0);
     let t=Number(document.getElementById('tax').value)||0;
     lDisp.innerText='$'+l.toFixed(2); gDisp.innerText='$'+(l+t).toFixed(2);
 }
 
-// TOGGLE SIGNATURE ENABLE/DISABLE
 let sigEnabled = false;
 function toggleSignature(cb) {
-    const canvas = document.getElementById('sig-canvas');
-    if (cb.checked) {
-        canvas.classList.add('enabled');
-        sigEnabled = true;
-    } else {
-        canvas.classList.remove('enabled');
-        sigEnabled = false;
-        clearSig();
-    }
+    const cvs = document.getElementById('sig-canvas');
+    if (cb.checked) { cvs.classList.add('enabled'); sigEnabled = true; } 
+    else { cvs.classList.remove('enabled'); sigEnabled = false; clearSig(); }
 }
 
-// Photo Logic
 let photoTotal=0;
 function addNewPhoto(){
     photoTotal++;
@@ -349,33 +309,23 @@ function pv(input,id){
     } 
 }
 
-// Signature Canvas
-const canvas=document.getElementById('sig-canvas'); 
-const ctx=canvas.getContext('2d');
+const canvas=document.getElementById('sig-canvas'); const ctx=canvas.getContext('2d');
 function clearSig() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 function resizeCanvas(){ 
     const ratio=window.devicePixelRatio||1; 
     canvas.width=canvas.offsetWidth*ratio; canvas.height=canvas.offsetHeight*ratio; 
     ctx.scale(ratio,ratio); ctx.lineWidth=2; ctx.strokeStyle="#000";
 }
-resizeCanvas(); 
-window.addEventListener('resize',resizeCanvas);
-
+resizeCanvas(); window.addEventListener('resize',resizeCanvas);
 let drawing=false;
 function pos(e){ 
     const r=canvas.getBoundingClientRect(); 
     return{ x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top }; 
 }
-canvas.addEventListener('mousedown',e=>{ 
-    if(!sigEnabled) return;
-    drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); 
-});
+canvas.addEventListener('mousedown',e=>{ if(!sigEnabled) return; drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); });
 canvas.addEventListener('mousemove',e=>{ if(!drawing || !sigEnabled)return; let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
 window.addEventListener('mouseup',()=>drawing=false);
-canvas.addEventListener('touchstart',e=>{ 
-    if(!sigEnabled) return;
-    drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); 
-},{passive:false});
+canvas.addEventListener('touchstart',e=>{ if(!sigEnabled) return; drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
 canvas.addEventListener('touchmove',e=>{ if(!drawing || !sigEnabled)return; e.preventDefault(); let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
 </script>
 </body>
