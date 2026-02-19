@@ -33,26 +33,28 @@ body {
     position: relative; 
 }
 
-/* HEADER - REPOSITIONED */
+/* HEADER - LOGOS LEFT, NAME CENTER, TAGLINE RIGHT */
 .top-header { 
     display: grid; 
-    grid-template-columns: 1.5fr 1fr 1fr; /* Name gets more space on left */
+    grid-template-columns: 1fr 2fr 1fr; 
     border-bottom: var(--border-heavy); 
     padding-bottom: 8px; 
     margin-bottom: 8px;
+    align-items: center;
 }
-.brand-left { color: var(--allpro-blue); text-align: left; }
-.brand-left h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
-.brand-left p { margin: 1px 0; font-size: 11px; font-weight: 600; }
 
-.header-center { text-align: center; }
-.badge-row { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 5px; }
+.header-left { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
 .cert-img-osha { height: 35px; width: auto; }
 .cert-img-epa { height: 40px; width: auto; }
 
-.brand-right { color: var(--allpro-blue); font-weight: bold; font-size: 11px; line-height: 1.1; text-align: right; }
+.header-center { text-align: center; color: var(--allpro-blue); }
+.header-center h1 { margin: 0; font-size: 24px; letter-spacing: 1px; text-transform: uppercase; }
+.header-center p { margin: 2px 0; font-size: 11px; font-weight: 600; }
+.header-center h4 { margin: 8px 0 0 0; font-size: 16px; text-decoration: underline; }
 
-/* INFO GRID - COMPACT */
+.header-right { color: var(--allpro-blue); font-weight: bold; font-size: 11px; line-height: 1.1; text-align: right; }
+
+/* INFO GRID */
 .info-grid { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
@@ -119,23 +121,20 @@ textarea {
 
 <div class="contract-page">
     <div class="top-header">
-        <div class="brand-left">
-            <h1>ALL PRO PAINTING PLUS</h1>
-            <p>(518) 701-0308</p>
-            <p>www.allpropaintingplus.com</p>
+        <div class="header-left">
+            <img src="lead-safe-certified-firm.png" class="cert-img-epa">
+            <img src="original333.png" class="cert-img-osha">
         </div>
         
         <div class="header-center">
-            <div class="badge-row">
-                <img src="lead-safe-certified-firm.png" class="cert-img-epa">
-                <img src="original333.png" class="cert-img-osha">
-            </div>
-            <p style="font-weight: bold; text-decoration: underline; color: var(--allpro-blue); font-size: 11px; margin: 0;">RESIDENTIAL PAINTING CONTRACT</p>
+            <h1>ALL PRO PAINTING PLUS</h1>
+            <p>(518) 701-0308 | www.allpropaintingplus.com</p>
+            <h4>RESIDENTIAL PAINTING CONTRACT</h4>
         </div>
 
-        <div class="brand-right">
+        <div class="header-right">
             Quality<br>Service<br>Reliability<br>
-            <div style="margin-top: 5px;">
+            <div style="margin-top: 8px;">
                 <span class="label" style="text-align: right;">Date</span>
                 <input type="text" id="docDate" style="text-align:right; font-weight: bold; font-size: 11px;">
             </div>
