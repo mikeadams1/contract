@@ -33,24 +33,26 @@ body {
     position: relative; 
 }
 
-/* HEADER */
+/* HEADER - REPOSITIONED */
 .top-header { 
     display: grid; 
-    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr; /* Name gets more space on left */
     border-bottom: var(--border-heavy); 
     padding-bottom: 8px; 
     margin-bottom: 8px;
 }
-.brand-side { color: var(--allpro-blue); font-weight: bold; font-size: 11px; line-height: 1.1;}
-.center-title { text-align: center; color: var(--allpro-blue); }
-.center-title h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
-.center-title p { margin: 1px 0; font-size: 11px; }
-.cert-side { text-align: right; }
-.badge-row { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin-bottom: 5px; }
+.brand-left { color: var(--allpro-blue); text-align: left; }
+.brand-left h1 { margin: 0; font-size: 22px; letter-spacing: 1px; }
+.brand-left p { margin: 1px 0; font-size: 11px; font-weight: 600; }
+
+.header-center { text-align: center; }
+.badge-row { display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 5px; }
 .cert-img-osha { height: 35px; width: auto; }
 .cert-img-epa { height: 40px; width: auto; }
 
-/* INFO GRID - COMPACT VERSION */
+.brand-right { color: var(--allpro-blue); font-weight: bold; font-size: 11px; line-height: 1.1; text-align: right; }
+
+/* INFO GRID - COMPACT */
 .info-grid { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
@@ -66,7 +68,6 @@ table { width: 100%; border-collapse: collapse; border: var(--border-heavy); mar
 th { border: 1px solid var(--allpro-blue); background: #f0f4f8; padding: 4px; font-size: 10px; color: var(--allpro-blue); }
 td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; }
 
-/* THIS FORCES THE ROW TO JUMP TO NEXT PAGE IF IT DOESN'T FIT */
 tr { 
     page-break-inside: avoid !important; 
     break-inside: avoid !important; 
@@ -83,7 +84,7 @@ textarea {
 }
 
 /* SIGNATURE BOX */
-#sig-canvas { background: #f9f9f9; cursor: crosshair; }
+#sig-canvas { background: #f9f9f9; cursor: crosshair; width: 100%; height: 70px; border-bottom: 1px solid #000; margin-top: 5px; }
 .sig-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; }
 
 /* PHOTO GRID */
@@ -109,7 +110,7 @@ textarea {
 .btn { padding: 15px 30px; font-weight: bold; cursor: pointer; border: 2px solid white; text-transform: uppercase; border-radius: 4px; }
 .btn-blue { background: var(--allpro-blue); color: white; }
 .btn-green { background: #27ae60; color: white; }
-.sig-btn { background: #eee; border: 1px solid #ccc; font-size: 9px; padding: 2px 5px; cursor: pointer; color: #666; }
+.sig-btn { background: #eee; border: 1px solid #ccc; font-size: 9px; padding: 2px 5px; cursor: pointer; color: #666; border-radius: 3px; }
 .btn-red { background: transparent; color: #cc0000; border:none; cursor:pointer; font-size:10px; margin-top:5px; }
 </style>
 </head>
@@ -118,20 +119,31 @@ textarea {
 
 <div class="contract-page">
     <div class="top-header">
-        <div class="brand-side">Quality<br>Service<br>Reliability</div>
-        <div class="center-title">
+        <div class="brand-left">
             <h1>ALL PRO PAINTING PLUS</h1>
-            <p>(518) 701-0308 | www.allpropaintingplus.com</p>
-            <p style="font-weight: bold; text-decoration: underline;">RESIDENTIAL PAINTING CONTRACT</p>
+            <p>(518) 701-0308</p>
+            <p>www.allpropaintingplus.com</p>
         </div>
-        <div class="cert-side">
+        
+        <div class="header-center">
             <div class="badge-row">
                 <img src="lead-safe-certified-firm.png" class="cert-img-epa">
                 <img src="original333.png" class="cert-img-osha">
             </div>
-            <span class="label">Date</span>
-            <input type="text" id="docDate" style="text-align:right; font-weight: bold;">
+            <p style="font-weight: bold; text-decoration: underline; color: var(--allpro-blue); font-size: 11px; margin: 0;">RESIDENTIAL PAINTING CONTRACT</p>
         </div>
+
+        <div class="brand-right">
+            Quality<br>Service<br>Reliability<br>
+            <div style="margin-top: 5px;">
+                <span class="label" style="text-align: right;">Date</span>
+                <input type="text" id="docDate" style="text-align:right; font-weight: bold; font-size: 11px;">
+            </div>
+        </div>
+    </div>
+
+    <div style="border: 3px double var(--allpro-blue); text-align: center; padding: 4px; margin-bottom: 10px; font-weight: bold; color: var(--allpro-blue); font-size: 10px;">
+        LICENSED / CERTIFIED / FULLY INSURED / 40 YEARS EXPERIENCE
     </div>
 
     <div class="info-grid">
@@ -161,11 +173,11 @@ textarea {
     <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:15px; margin-top:10px;">
         <div style="border:var(--border-heavy); padding:8px;">
             <span class="label" style="font-size:7px; line-height: 1.1;">Customer Signature and Acceptance: Stipulates authority to enter into Contract and agreement to Payment In Full On Day Of Completion.</span>
-            <canvas id="sig-canvas" style="width:100%; height:70px; border-bottom: 1px solid #000;"></canvas>
+            <canvas id="sig-canvas"></canvas>
             <div class="sig-controls">
-                <span style="font-size: 10px;">Signature</span>
+                <span style="font-size: 10px; color: var(--allpro-blue); font-weight: bold;">Signature</span>
                 <button class="sig-btn no-print" onclick="clearSig()">Clear Signature</button>
-                <span style="font-size: 10px;">Date</span>
+                <span style="font-size: 10px; color: var(--allpro-blue); font-weight: bold;">Date</span>
             </div>
         </div>
         <div style="border:var(--border-heavy); padding:10px; text-align:right; color:var(--allpro-blue);">
