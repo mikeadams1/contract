@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Pro Painting Plus - Contract App</title>
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="All Pro Painting">
+<link rel="apple-touch-icon" href="original333.png">
+<style>
+:root { 
+    --allpro-blue: #002D62; 
+    --border-heavy: 2px solid var(--allpro-blue); 
+}
+
+body { 
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #555; 
+    margin: 0; padding: 0; padding-bottom: 120px; 
+}
+
+.contract-page { 
+    background: white; 
+    width: 8.5in;
+    margin: 20px auto; 
+    padding: 0.4in; 
+    box-shadow: 0 0 15px rgba(0,0,0,0.5); 
+    box-sizing: border-box; 
+    position: relative; 
+}
+
+/* HEADER STYLING FROM PDF */
+.header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: var(--border-heavy);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.header-left { color: var(--allpro-blue); font-size: 13px; font-weight: bold; }
+.header-center { text-align: center; flex-grow: 1; }
+.header-center h1 { color: var(--allpro-blue); margin: 0; font-size: 28px; text-transform: uppercase; }
+.header-center p { margin: 2px 0; font-size: 12px; font-weight: 600; }
+.header-right { display: flex; gap: 10px; }
+
+.badge-img { height: 50px; width: auto; }
+
+/* INFO GRID */
+.info-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    border: var(--border-heavy); 
+    margin-bottom: 15px; 
+}
+.info-cell { border: 1px solid var(--allpro-blue); padding: 4px 8px; }
+.label { font-size: 10px; font-weight: 800; text-transform: uppercase; display: block; color: var(--allpro-blue); }
+input { border: none; font-family: inherit; font-size: 14px; width: 100%; outline: none; background: transparent; }
+
+/* TABLE FIXES FOR IPAD */
+table { width: 100%; border-collapse: collapse; border: var(--border-heavy); margin-bottom: 10px; table-layout: fixed; }
+th { border: 1px solid var(--allpro-blue); background: #f0f4f8; padding: 8px; font-size: 12px; color: var(--allpro-blue); }
+td { border: 1px solid var(--allpro-blue); padding: 0; vertical-align: top; }
+tr, td { page-break-inside: avoid !important; break-inside: avoid !important; }
+
+textarea { 
+    width: 100%; border: none; font-family: inherit; font-size: 13px; resize: none; 
+    background: transparent; padding: 6px; box-sizing: border-box; overflow: hidden; 
+    min-height: 40px; line-height: 1.4; display: block;
+}
+
+.print-text {
+    display: none; white-space: pre-wrap; word-wrap: break-word; font-size: 13px;
+    padding: 6px; line-height: 1.4;
+}
+
+/* PHOTO LOG SECTION */
+.photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.photo-slot { 
+    border: 1px solid var(--allpro-blue); padding: 10px; background: #fff; 
+    page-break-inside: avoid !important; break-inside: avoid !important; margin-bottom: 10px;
+}
+.preview-img { max-width: 100%; height: auto; max-height: 250px; margin: 10px auto; display: none; border: 1px solid #333; }
+
+/* FOOTER BUTTONS */
+.app-footer { position: fixed; bottom: 0; width: 100%; background: #111; padding: 20px; display: flex; justify-content: center; gap: 20px; z-index: 1000; }
+.btn { padding: 15px 30px; font-weight: bold; cursor: pointer; border: 2px solid white; text-transform: uppercase; border-radius: 4px; }
+.btn-blue { background: var(--allpro-blue); color: white; }
+.btn-green { background: #27ae60; color: white; }
+.btn-red { background: transparent; color: #cc0000; border:none; cursor:pointer; font-size:10px; }
+
+@media print {
+    @page { size: Letter; margin: 0.4in; }
+    body { background: white; padding: 0; }
+    .app-footer, .no-print, input[type="file"], .btn-red { display: none !important; }
+    .contract-page { margin: 0; width: 100%; box-shadow: none; border: none !important; }
+    textarea { display: none !important; }
+    .print-text { display: block !important; }
+    .force-break { break-before: page; page-break-before: always; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="contract-page">
+    <div class="header-top-row">
+        <div class="header-left">
+            Quality<br>Service<br>Reliability
+        </div>
+        <div class="header-center">
+            <h1>ALL PRO PAINTING PLUS</h1>
+            <p>Phone: (518) 701-0308 | www.AllProPaintingPlus.com</p>
+            <p style="font-size: 14px; margin-top: 5px; text-decoration: underline;">Residential Interior Painting Contract</p>
+        </div>
+        <div class="header-right">
+            <img src="lead-safe-certified-firm.png" class="badge-img">
+            <img src="original333.png" class="badge-img">
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-cell" style="grid-column: span 3;"><span class="label">Customer Name</span><input type="text" placeholder="e.g. Crystal Eckert"></div>
+        <div class="info-cell"><span class="label">Date</span><input type="text" id="currentDate"></div>
+        
+        <div class="info-cell" style="grid-column: span 3;"><span class="label">Project Address</span><input type="text" placeholder="Street, City, State, Zip"></div>
+        <div class="info-cell"><span class="label">Phone Number</span><input type="text"></div>
+        
+        <div class="info-cell" style="grid-column: span 2;"><span class="label">Email Address</span><input type="text"></div>
+        <div class="info-cell"><span class="label">Project Start</span><input type="text" placeholder="Date"></div>
+        <div class="info-cell"><span class="label">Estimated Completion</span><input type="text" placeholder="Date"></div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width:70%;">TYPE / WORK DESCRIPTION</th>
+                <th style="width:15%;">MATERIAL</th>
+                <th style="width:15%;">LABOR COST</th>
+            </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+    </table>
+
+    <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:15px; margin-top:10px;">
+        <div style="border: var(--border-heavy); padding: 10px; font-size: 10px; line-height: 1.2;">
+            <p><strong>Customer agrees to all of the terms stipulated in this contract including payment in full upon the day of completion. Payment will be by local check, cash or Fed wire only. We do not accept credit cards.</strong></p>
+            <span class="label" style="margin-top:10px;">Customer Signature</span>
+            <canvas id="sig-canvas" style="width:100%; height:80px; border-bottom: 1px solid #000;"></canvas>
+        </div>
+        <div style="border: var(--border-heavy); padding: 10px; text-align: right; color: var(--allpro-blue); font-weight: bold;">
+            <div style="margin-bottom: 5px;">SUB TOTAL: <span id="lDisp">$0.00</span></div>
+            <div style="margin-bottom: 5px; font-size: 12px;">NY STATE SALES TAX: <input type="number" id="tax" style="width:80px; border-bottom:1px solid #002D62; text-align:right;" onchange="calcTotal()"></div>
+            <div style="font-size: 18px; border-top: 2px solid var(--allpro-blue); padding-top: 5px; margin-top: 5px;">
+                TOTAL DUE: <span id="gDisp">$0.00</span>
+            </div>
+            <p style="font-size: 10px; margin-top: 15px;">Contractors Signature: _________________</p>
+        </div>
+    </div>
+</div>
+
+<div class="contract-page force-break">
+    <h2 style="color: var(--allpro-blue); border-bottom: var(--border-heavy); font-size: 18px; margin-top: 0;">NEW YORK STATE DISCLOSURES & TERMS</h2>
+    <div style="font-size: 10.5px; line-height: 1.4; text-align: justify;">
+        <p><strong>LEGAL DISCLOSURES:</strong> Pursuant to New York State General Business Law the following disclosures listed herein are understood and accepted by the party signing this contract... [cite: 20] Pursuant to GBL 771(1)(h) you have a right to cancel this contract within three business days. [cite: 21] Cancellation occurs when written notice of cancellation is given to the home improvement contractor. [cite: 23]</p>
+        
+        <p><strong>MECHANIC'S LIEN NOTICE:</strong> Any contractor, subcontractor, or materialman who provides home improvement goods or services pursuant to your home improvement contract and who is not paid may have a valid legal claim against your property known as a mechanic's lien. [cite: 28] Payment of the agreed-upon price under the home improvement contract prior to filing of a mechanic's lien may invalidate such lien. [cite: 30]</p>
+
+        <p><strong>UNFORESEEN CONDITIONS:</strong> In the event that any additional unforeseen work is discovered and required to complete the terms of this contract, consumer agrees to pay any additional reasonable fees to accomplish the same. [cite: 43] In no way will we be responsible for any unforeseen work or damage not visible at the time the project was estimated or discovered. [cite: 45]</p>
+
+        <p><strong>NON-DISPARAGEMENT:</strong> You agree that you will not publicly criticize, ridicule, disparage or defame APP+, the company or its products, services, policies, directors, officers, employees, through any written or oral statement (including internet postings). [cite: 40]</p>
+
+        <p><strong>SITE SAFETY:</strong> Once work has commenced, the customer is prohibited from access to the worksite for safety reasons to maintain a safe working environment in conformity with OSHA Regulations. [cite: 56] All children must be kept from project work site, no exceptions. [cite: 57]</p>
+    </div>
+</div>
+
+<div id="photoPagesContainer"></div>
+
+<div class="app-footer">
+    <button class="btn btn-blue" onclick="addRow()">+ Add Line</button>
+    <button class="btn btn-blue" onclick="addNewPhoto()">+ Add Photo</button>
+    <button class="btn btn-green" onclick="window.print()">Generate PDF</button>
+</div>
+
+<script>
+// Auto-fill today's date
+const d = new Date();
+document.getElementById('currentDate').value = d.toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'}).toUpperCase();
+
+function addRow(){ 
+    const tr=document.createElement('tr'); 
+    tr.innerHTML=`
+        <td><textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div></td>
+        <td><textarea oninput="autoExpand(this)"></textarea><div class="print-text"></div></td>
+        <td><input type="number" class="lab" onchange="calcTotal()" placeholder="0.00"></td>`; 
+    document.getElementById('rows').appendChild(tr); 
+}
+addRow(); // Initialize one row
+
+function autoExpand(el){ 
+    el.style.height="auto"; 
+    el.style.height=el.scrollHeight+"px"; 
+    const printDiv = el.parentElement.querySelector('.print-text');
+    if(printDiv) printDiv.innerText = el.value;
+}
+
+function calcTotal(){
+    let labor=0;
+    document.querySelectorAll('.lab').forEach(i=>labor+=Number(i.value)||0);
+    let tax=Number(document.getElementById('tax').value)||0;
+    document.getElementById('lDisp').innerText='$'+labor.toFixed(2); 
+    document.getElementById('gDisp').innerText='$'+(labor+tax).toFixed(2);
+}
+
+let photoTotal=0;
+function addNewPhoto(){
+    photoTotal++;
+    let container = document.getElementById('photoPagesContainer');
+    let pages = container.querySelectorAll('.photo-page');
+    let last = pages[pages.length-1];
+    
+    if(!last || last.querySelector('.photo-grid').querySelectorAll('.photo-slot').length >= 4){
+        last = document.createElement('div');
+        last.className = 'contract-page photo-page force-break';
+        last.innerHTML = `<h2 style="border-bottom:var(--border-heavy);color:var(--allpro-blue); margin-top:0;">PROJECT PHOTO LOG</h2><div class="photo-grid"></div>`;
+        container.appendChild(last);
+    }
+    
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    const id = 'img-' + photoTotal;
+    slot.innerHTML = `
+        <span class="label">Photo Description</span>
+        <textarea oninput="autoExpand(this)" style="font-size:11px;"></textarea>
+        <div class="print-text" style="font-size:11px;"></div>
+        <input type="file" accept="image/*" onchange="pv(this,'${id}')" class="no-print">
+        <img id="${id}" class="preview-img">
+        <button class="btn-red" onclick="this.parentElement.remove()">Remove Photo</button>`;
+    last.querySelector('.photo-grid').appendChild(slot);
+}
+
+function pv(input,id){ 
+    if(input.files && input.files[0]){ 
+        let r=new FileReader(); 
+        r.onload=e=>{ 
+            let img=document.getElementById(id); 
+            img.src=e.target.result; 
+            img.style.display='block'; 
+        }; 
+        r.readAsDataURL(input.files[0]); 
+    } 
+}
+
+// Signature Canvas
+const canvas=document.getElementById('sig-canvas'); 
+const ctx=canvas.getContext('2d');
+function resizeCanvas(){ 
+    const ratio=window.devicePixelRatio||1; 
+    canvas.width=canvas.offsetWidth*ratio; canvas.height=canvas.offsetHeight*ratio; 
+    ctx.scale(ratio,ratio); ctx.lineWidth=2; ctx.strokeStyle="#000";
+}
+resizeCanvas(); window.addEventListener('resize',resizeCanvas);
+let drawing=false;
+function pos(e){ 
+    const r=canvas.getBoundingClientRect(); 
+    return{ x:(e.touches?e.touches[0].clientX:e.clientX)-r.left, y:(e.touches?e.touches[0].clientY:e.clientY)-r.top }; 
+}
+canvas.addEventListener('mousedown',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); });
+canvas.addEventListener('mousemove',e=>{ if(!drawing)return; let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+window.addEventListener('mouseup',()=>drawing=false);
+canvas.addEventListener('touchstart',e=>{ drawing=true; ctx.beginPath(); let p=pos(e); ctx.moveTo(p.x,p.y); },{passive:false});
+canvas.addEventListener('touchmove',e=>{ if(!drawing)return; e.preventDefault(); let p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); },{passive:false});
+</script>
+</body>
+</html>
